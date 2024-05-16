@@ -1,59 +1,29 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-int numofPacket;
-float tp;
-float tt;
-float time = 0;
-int i, j, k;
-
-void sender();
-void receiver();
-
-void sender(){
-    printf("\nEnter number of packets :");
-    scanf("%d", &numofPacket);
-    
-    int packet[numofPacket];
-
-    printf("\nEnter packets : ");
-    for(i = 0; i < numofPacket; i++){
-        scanf("\n%d", &packet[i]);
+void Calculatetime(float Tt,float Tp,int n){
+    float time = 0;
+    for(int i = 0; i < n; i++){
+        time += Tp+Tt;
+        printf("received P%d at %.2f ms\n",i+1,time);
+        time += Tt+Tp;
+        printf("received Ack%d at %.2f ms\n\n",i+2,time);
     }
-
-    printf("\nEnter transmission time in ms : ");
-    scanf("%f", &tt);
-
-    printf("\nEnter propagation time in ms : ");
-    scanf("%f", &tp);
-
-    printf("\nTheoretically time taken to transmit %d number of packets should be %.2f", numofPacket, numofPacket*2*(tt+tp));
-    printf("\n");
-    
-    for(i = 0; i < numofPacket; i++){
-        time += tt;
-        printf("\nFor %d : \n",packet[i]);
-        printf("\nBuffer time is %.2f",time);
-        receiver();
-    }
-    printf("\n");
-    printf("\nTotal time taken is %.2f", time);
-    printf("\n");
+    printf("Total time required is %.2f ms",n*2*(Tt+Tp));
 }
 
-void receiver(){
-    time += tp;
-    printf("\nPacket received at %.2f", time);
-    time += tt;
-    printf("\nAcknowledgement sent at %.2f", time);
-    time += tp;
-    printf("\nAcknowledgement received at %.2f", time);
-    printf("\n-----------------------");
+int main() {
+    int n;
+    float Tt, Tp;
 
-    printf("\n");
-}
+    printf("Enter the number of packets: ");
+    scanf("%d", &n);
 
-int main(){
-    sender();
+    printf("Enter the transmission time per packet (in ms): ");
+    scanf("%f", &Tt);
+
+    printf("Enter the propagation time (in ms): ");
+    scanf("%f", &Tp);
+
+    Calculatetime(Tt,Tp,n);
     return 0;
 }
