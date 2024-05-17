@@ -6,9 +6,10 @@
 #include <sys/socket.h>
 
 #define PORT 8080  // Specify the port here
+#define MAX_DATA_SIZE 1024  // Maximum size of data in the packet
 
 typedef struct packet {
-    char data[1024];
+    char data[MAX_DATA_SIZE];
 } Packet;
 
 typedef struct frame {
@@ -28,14 +29,31 @@ int main() {
     Frame frame_recv;
     int ack_recv = 1;
 
+    // Create socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
+    // Configure server address
     memset(&serverAddr, '\0', sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(PORT);  // Specify the port here
     serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    while (1) {
+    // Get number of packets to send from user
+    int num_packets;
+    printf("Enter the number of packets to send: ");
+    scanf("%d", &num_packets);
+
+    // Get size of data packet from user
+    int packet_size;
+    printf("Enter the size of data packet (max %d bytes): ", MAX_DATA_SIZE);
+    scanf("%d", &packet_size);
+    
+    if (packet_size > MAX_DATA_SIZE || packet_size <= 0) {
+        printf("Invalid packet size. Please enter a value between 1 and %d.\n", MAX_DATA_SIZE);
+        return 1;
+    }
+
+    for (int i = 0; i < num_packets; i++) {
         if (ack_recv == 1) {
             frame_send.sq_no = frame_id;
             frame_send.frame_kind = 1;
@@ -44,8 +62,11 @@ int main() {
             printf("Enter Data: ");
             scanf("%s", frame_send.packet.data);
 
+            // Ensure the data does not exceed the specified packet size
+            frame_send.packet.data[packet_size - 1] = '\0'; // Null-terminate if necessary
+
             sendto(sockfd, &frame_send, sizeof(Frame), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
-            printf("Frame Send\n");
+            printf("Frame Sent\n");
         }
 
         addr_size = sizeof(serverAddr);
@@ -62,7 +83,7 @@ int main() {
         frame_id++;
     }
 
+    // Close socket
     close(sockfd);
     return 0;
 }
-
