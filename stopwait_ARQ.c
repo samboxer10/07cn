@@ -11,7 +11,7 @@ void Calculatetime(float Tt, float Tp, int n, int *lost_packets) {
             printf("Sending packet %d\n", i + 1);
             printf("Packet %d lost, retransmitting...\n", i + 1);
             time += (3 * RTT + Tt);
-            printf("P%d resent at %.2f ms\n", i+1, time);
+            printf("P%d resent at %.2f ms\n", i + 1, time);
             time += Tp;
             printf("Received P%d at %.2f ms\n", i + 1, time);
             time += Tt + Tp;
@@ -21,12 +21,12 @@ void Calculatetime(float Tt, float Tp, int n, int *lost_packets) {
             time += Tp + Tt;
             printf("Received P%d at %.2f ms\n", i + 1, time);
             time += Tt + Tp;
-            printf("Received Ack%d at %.2f ms\n\n", i + 2, time);
+            printf("Received Ack%d at %.2f ms\n\n", i + 1, time);
             last_received_packet = i + 1;
         }
     }
 
-    float total_time = (n - lost_count) * (2 * (Tt + Tp)) + lost_count * (4 * RTT + Tt);
+    float total_time = time;
     printf("Total time required is %.2f ms\n", total_time);
 }
 
@@ -48,9 +48,16 @@ int main() {
     for (int i = 0; i < n; i++) {
         lost_packets[i] = 0;
     }
+
     int packet_num;
-    while (scanf("%d", &packet_num) == 1 && packet_num > 0 && packet_num <= n) {
-        lost_packets[packet_num - 1] = 1;
+    char ch;
+    while (scanf("%d%c", &packet_num, &ch) == 2) {
+        if (packet_num > 0 && packet_num <= n) {
+            lost_packets[packet_num - 1] = 1;
+        }
+        if (ch == '\n') {
+            break;
+        }
     }
 
     Calculatetime(Tt, Tp, n, lost_packets);
