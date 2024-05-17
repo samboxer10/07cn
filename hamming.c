@@ -33,14 +33,14 @@ void calculateParityBit(char dataWithParity[], int parityPosition[])
         {
             dataWithParity[10 - parityPosition[i]] = '0';
             printf("\n=> P%d = %d", parityPosition[i]+1, 0);
-            printf("\n--------------------------");
+            printf("\n");
         }
 
         else
         {
             dataWithParity[10 - parityPosition[i]] = '1';
             printf("\n=> P%d = %d", parityPosition[i]+1, 1);
-            printf("\n--------------------------");
+            printf("\n");
         }
     }
 }
@@ -184,10 +184,10 @@ int main()
         printf("\nFinal data after introducing error: ");
         printData(finalData);
 
-        printf("\n-----------------------------------------------------------------------");
+        printf("\n");
         // calculate parity bits
         calculateParityBitForReceiver(finalData, parityPosition);
-        printf("\n-----------------------------------------------------------------------");
+        printf("\n");
         printf("\nCalculated Parity Bits (Receiver side) : ");
         printBits(bits);
         printf("\n");
@@ -222,13 +222,13 @@ int main()
         }
 
         printData(finalData);
-        printf("\n-----------------------------------------------------------------------");
+        printf("\n");
         break;
     case 2:
-        printf("\n-----------------------------------------------------------------------");
-        // calculate parity bits
+        printf("\n");
+        
         calculateParityBitForReceiver(finalData, parityPosition);
-        printf("\n-----------------------------------------------------------------------");
+        printf("\n");
         printf("\nCalculated Parity Bits (Receiver side) : ");
         for (int u = 0; u < 4; u++)
         {
@@ -242,7 +242,7 @@ int main()
         {
             printf("%c ", finalData[t]);
         }
-        printf("\n-----------------------------------------------------------------------");
+        printf("\n");
         break;
 
     default:
